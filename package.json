@@ -1,0 +1,15 @@
+{
+  "name": "nexaracer",
+  "version": "1.0.0",
+  "description": "Drive into the future with `NexaRacer`, an Internet of Things (IoT) connected racecar controlled seamlessly from a web interface.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/junlee-3/NexaRacer"
+  },
+  "author": "Jun Lee",
+  "license": "ISC"
+}
