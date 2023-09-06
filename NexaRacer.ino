@@ -39,3 +39,14 @@ void handleWebSocketMessage(uint8_t* data, size_t len) {
         ESC.write(speedValue);  // Adjust the speed ESC based on the received speed value
     }
 }
+
+void setup() {
+    Serial.begin(9600);
+
+    WiFi.begin(ssid, password);
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(1000);
+        Serial.println("Connecting to WiFi ...");
+    }
+    Serial.println("Connected to WiFi!");
+}
