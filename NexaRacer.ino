@@ -49,4 +49,10 @@ void setup() {
         Serial.println("Connecting to WiFi ...");
     }
     Serial.println("Connected to WiFi!");
+
+    webSocket.begin("YOUR_NODE_SERVER_IP", 3000, "/");
+    webSocket.onEvent(webSocketEvent);
+
+    steering.attach(5); //Setup Pin numbers - CHANGE LATER
+    ESC.attach(16, 1000, 2000);
 }
