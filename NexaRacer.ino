@@ -56,3 +56,7 @@ void setup() {
     steering.attach(5); //Setup Pin numbers - CHANGE LATER
     ESC.attach(16, 1000, 2000);
 }
+
+void loop() {
+    webSocket.loop();
+}
