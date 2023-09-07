@@ -12,12 +12,12 @@
     <h1>Car Controls</h1>
     <div>
         <label>Steering:</label>
-        <input type="range" min="0" max="180" step="1" value="90" id="steeringSlider" onchange="updateValue('steering', this.value)" />
+        <input type="range" min="0" max="180" step="1" value="90" id="steeringSlider" oninput="updateValue('steering', this.value)" onchange="updateValue('steering', this.value)" />
         <span id="steeringValue">90</span>
     </div>
     <div>
         <label>Speed:</label>
-        <input type="range" min="0" max="180" step="1" value="90" id="speedSlider" onchange="updateValue('speed', this.value)" />
+        <input type="range" min="0" max="180" step="1" value="90" id="speedSlider" oninput="updateValue('speed', this.value)" onchange="updateValue('speed', this.value)" />
         <span id="speedValue">90</span>
     </div>
 </body>
