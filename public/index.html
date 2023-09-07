@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexaRacer Control Panel</title>
+    <script defer src = "js/control.js"></script>
+</head>
+<body>
+    <h1>Car Controls</h1>
+    <div>
+        <label>Steering:</label>
+        <input type="range" min="0" max="180" step="1" value="90" id="steeringSlider" onchange="sendValue('steering', this.value)" />
+        <span id="steeringValue">90</span>
+    </div>
+    <div>
+        <label>Speed:</label>
+        <input type="range" min="0" max="180" step="1" value="90" id="speedSlider" onchange="sendValue('speed', this.value)" />
+        <span id="speedValue">90</span>
+    </div>
+</body>
+</html>
