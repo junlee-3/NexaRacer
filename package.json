@@ -11,5 +11,10 @@
     "url": "https://github.com/junlee-3/NexaRacer"
   },
   "author": "Jun Lee",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mqtt": "^5.1.1",
+    "ws": "^8.14.2"
+  }
 }

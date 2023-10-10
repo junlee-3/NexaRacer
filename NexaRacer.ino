@@ -1,62 +1,120 @@
-#include <Arduino.h>
-#include <WiFi.h>
-#include <ESPAsyncTCP.h>
-#include <ESPAsyncWebServer.h>
-#include <WebSocketsClient.h>
+#include <ESP8266WiFi.h>
+#include <PubSubClient.h>
 #include <Servo.h>
 
-const char* ssid = "Your_SSID";
-const char* password = "Your_PASSWORD";
+// WiFi and MQTT Credentials
+const char* ssid = "#";
+const char* password = "#";
+const char* mqtt_server = "test.mosquitto.org";
 
+// Define Servos and other variables
 Servo steering;
 Servo ESC;
 
-WebSocketsClient webSocket;
 
-void webSocketEvent(WStype_t type, uint8_t* payload, size_t length) {
-    switch(type) {
-        case WStype_DISCONNECTED:
-            Serial.printf("[WSc] Disconnected!\n");
-            break;
-        case WStype_CONNECTED:
-            Serial.printf("[WSc] Connected to url: %s\n");
-            break;
-        case WStype_TEXT:
-            handleWebSocketMessage(payload, length);
-            break;
-    }
-}
-
-void handleWebSocketMessage(uint8_t* data, size_t len) {
-    String receivedMsg = String((char*)data);
-    if (receivedMsg.startsWith("steering:")) {
-        String value = receivedMsg.substring(9); // 9 is the length of "steering:"
-        int angle = value.toInt();
-        steering.write(angle);  // Adjust the steering servo based on the received angle
-    } else if (receivedMsg.startsWith("speed:")) {
-        String value = receivedMsg.substring(6); // 6 is the length of "speed:"
-        int speedValue = value.toInt();
-        ESC.write(speedValue);  // Adjust the speed ESC based on the received speed value
-    }
-}
+WiFiClient espClient;
+PubSubClient client(espClient);
+#define trigPin D2
+#define echoPin D3
 
 void setup() {
-    Serial.begin(9600);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  Serial.begin(9600);
+  steering.attach(D5);
+  ESC.attach(D8, 1000, 2000);
+  
+  // Initialize servos to neutral position
+  steering.write(90);
+  ESC.write(90);
+  delay(1000);
+  
+  // Connect to WiFi and then to the MQTT server
+  setup_wifi();
+  client.setServer(mqtt_server, 1883);
+  client.setCallback(callback);
 
-    WiFi.begin(ssid, password);
-    while (WiFi.status() != WL_CONNECTED) {
-        delay(1000);
-        Serial.println("Connecting to WiFi ...");
+  ESC.attach(D8, 1000, 2000);
+  steering.attach(D5);
+}
+
+void setup_wifi() {
+  delay(10);
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void callback(char* topic, byte* payload, unsigned int length) {
+  String slider = "";
+  int value = 0;
+
+  // Convert the payload to a string
+  String payloadString = String((char*)payload).substring(0, length);
+
+  // Find the slider value in the payload
+  int sliderStart = payloadString.indexOf("\"slider\":\"") + 10;
+  int sliderEnd = payloadString.indexOf("\"", sliderStart);
+  if (sliderStart != -1 && sliderEnd != -1) {
+      slider = payloadString.substring(sliderStart, sliderEnd);
+  }
+
+  // Find the value in the payload
+  int valueStart = payloadString.indexOf("\"value\":\"") + 9;
+  int valueEnd = payloadString.indexOf("\"", valueStart);
+  if (valueStart != -1 && valueEnd != -1) {
+      value = payloadString.substring(valueStart, valueEnd).toInt();
+  }
+
+  Serial.print("Received slider: ");
+  Serial.print(slider);
+  Serial.print(", value: ");
+  Serial.println(value);
+
+  if (slider == "steering") {
+    steering.attach(D5);
+    steering.write(value);
+    delay(10);
+  } 
+  else if (slider == "speed") {
+    ESC.attach(D8, 1000, 2000);
+    ESC.write(value);
+    delay(10);
+  }
+}
+
+void reconnect() {
+  while (!client.connected()) {
+    Serial.print("Attempting MQTT connection...");
+    String clientId = "ESP8266Client_" + String(random(0xffff), HEX);
+    if (client.connect(clientId.c_str())) {
+      Serial.println("connected");
+      client.subscribe("esp/car");
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 5 seconds");
+      delay(5000);
     }
-    Serial.println("Connected to WiFi!");
-
-    webSocket.begin("YOUR_NODE_SERVER_IP", 3000, "/");
-    webSocket.onEvent(webSocketEvent);
-
-    steering.attach(5); //Setup Pin numbers - CHANGE LATER
-    ESC.attach(16, 1000, 2000);
+  }
 }
 
 void loop() {
-    webSocket.loop();
+  if (!client.connected()) {
+    reconnect();
+  }
+  client.loop();
+  delay(100);
 }

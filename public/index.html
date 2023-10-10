@@ -1,24 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexaRacer Control Panel</title>
-
-    <script defer src = "control.js" ></script>
-    <link rel="stylesheet" href="styles.css">
+    <title>ESP Car Control</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        alert("js")
+        function updateSlider(sliderId, value) {
+            fetch(`/send?slider=${sliderId}&value=${value}`);
+        }
+    </script>
 </head>
 <body>
-    <h1>Car Controls</h1>
-    <div>
-        <label>Steering:</label>
-        <input type="range" min="0" max="180" step="1" value="90" id="steeringSlider" oninput="updateValue('steering', this.value)" onchange="updateValue('steering', this.value)" />
-        <span id="steeringValue">90</span>
-    </div>
-    <div>
-        <label>Speed:</label>
-        <input type="range" min="0" max="180" step="1" value="90" id="speedSlider" oninput="updateValue('speed', this.value)" onchange="updateValue('speed', this.value)" />
-        <span id="speedValue">90</span>
-    </div>
+    <h1>ESP Car Control</h1>
+    <label>Steering:</label>
+    <input type="range" min="0" max="180" oninput="updateSlider('steering', this.value)" />
+    <label>Speed:</label>
+    <input type="range" min="0" max="180" oninput="updateSlider('speed', this.value)" />
 </body>
 </html>

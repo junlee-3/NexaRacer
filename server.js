@@ -1,22 +1,24 @@
-const express = require("express");
-const http = require("http");
-const WebSocket = require("ws");
-const path = require("path");
-
+const express = require('express');
+const mqtt = require('mqtt');
 const app = express();
-const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+const port = 3000;
 
-wss.on("connection", (ws) => {
-    console.log("ESP32 connected");
+const mqttBroker = 'mqtt://test.mosquitto.org'; // Use a free test broker
+const client = mqtt.connect(mqttBroker);
 
-    ws.on('message', (message) => {
-        console.log(`Received message => ${message}`);
-    });
+client.on('connect', function () {
+  console.log('Connected to MQTT Broker');
 });
 
-app.use(express.static('public'));  // Your HTML, CSS, JS are in a directory named "public"
+app.use(express.static('public'));
 
-server.listen(3000, () => {
-    console.log('Server started on http://localhost:3000');
+app.get('/send', (req, res) => {
+  const { slider, value } = req.query;
+  console.log(`Sending ${slider} with value ${value} to MQTT broker.`);
+  client.publish('esp/car', JSON.stringify({ slider, value }));
+  res.sendStatus(200);
+});
+
+app.listen(port, () => {
+  console.log(`Server started on http://localhost:${port}`);
 });
