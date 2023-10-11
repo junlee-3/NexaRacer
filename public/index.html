@@ -2,9 +2,8 @@
 <html>
 <head>
     <title>ESP Car Control</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
     <script>
-        alert("js")
         function updateSlider(sliderId, value) {
             fetch(`/send?slider=${sliderId}&value=${value}`);
         }

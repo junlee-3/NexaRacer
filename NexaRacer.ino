@@ -11,7 +11,6 @@ const char* mqtt_server = "test.mosquitto.org";
 Servo steering;
 Servo ESC;
 
-
 WiFiClient espClient;
 PubSubClient client(espClient);
 #define trigPin D2
