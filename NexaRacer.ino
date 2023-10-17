@@ -3,8 +3,8 @@
 #include <Servo.h>
 
 // WiFi and MQTT Credentials
-const char* ssid = "#";
-const char* password = "#";
+const char* ssid = "CGS-WIFI";
+const char* password = "poster-glass-note";
 const char* mqtt_server = "test.mosquitto.org";
 
 // Define Servos and other variables
@@ -53,7 +53,7 @@ void setup_wifi() {
   Serial.println("");
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
+  Serial.println(WiFi.localIP() );
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
@@ -115,5 +115,26 @@ void loop() {
     reconnect();
   }
   client.loop();
+
+
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+
+  // Send a 10-microsecond pulse to the TRIG_PIN
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Read the time for which the ECHO_PIN stays HIGH
+  long duration = pulseIn(echoPin, HIGH);
+
+  // Calculate the distance in centimeters (Speed of sound is 343m/s)
+  // The sound travels to the object and then back, so we have to divide by 2
+  float distance = (duration * 0.0343) / 2;
+
+  // Print the distance to the serial monitor
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
   delay(100);
 }
