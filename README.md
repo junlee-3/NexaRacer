@@ -4,8 +4,8 @@ Drive into the future with `NexaRacer`, an Internet of Things (IoT) connected ra
 
 ## 📖 Overview
 
-`NexaRacer` combines the thrill of racing with the power of modern IoT technologies. Using a Node.js backend server and a sleek web interface, users can control the speed and steering of their ESP8266-based racecar in real-time. With WebSocket integration, commands from the browser are instantly translated to movements on the ground.
-The project utilises an ESP8266 board running firmware and NodeJS to control a remote-controlled car. Through websockets, the ESP8266 is able to recive data and turn that into movements.
+`NexaRacer` combines the thrill of racing with the power of modern IoT technologies. Using a Node.js backend server and a sleek web interface, users can control the speed and steering of their ESP8266-based racecar in real-time. With    MQTT, the start for communication with IoT devicesi, commands from the browser are instantly translated to movements on the ground.
+The project utilises an ESP8266 board running firmware and NodeJS to control a remote-controlled car. Through MQTT, the ESP8266 is able to recive data and turn that into movements.
 
 ## ✨ Features
 
