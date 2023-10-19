@@ -1,10 +1,13 @@
-#include <ESP8266WiFi.h>
-#include <PubSubClient.h>
+#include <ESP8266WiFi.h> //THIS PROJECT USES THE ESP8266 RATHER THAN THE ESP32, MR ZAMPOGNA HAS GIVEN ME PERMISSION
+#include <PubSubClient.h> //TO USE THIS
 #include <Servo.h>
+#include <Adafruit_NeoPixel.h>
 
 // WiFi and MQTT Credentials
-const char* ssid = "CGS-WIFI";
-const char* password = "poster-glass-note";
+//THIS PROJECT USES MQTT! THIS MEANS IT NEEDS AN INTERNET CONNECTION
+//PROXIMA WILL NOT WORK! PLEASE USE CGS-WIFI OR ANOTHER FORM OF NETWORK THAT CAN CONNECT TO THE INTERNET
+const char* ssid = "";
+const char* password = "";
 const char* mqtt_server = "test.mosquitto.org";
 
 // Define Servos and other variables
@@ -13,8 +16,13 @@ Servo ESC;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
+Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
+
 #define trigPin D2
 #define echoPin D3
+#define buzzerPin D4
+#define LED_PIN    D6
+#define LED_COUNT 30
 
 void setup() {
   pinMode(trigPin, OUTPUT);
@@ -35,6 +43,9 @@ void setup() {
 
   ESC.attach(D8, 1000, 2000);
   steering.attach(D5);
+
+  strip.begin();
+  strip.show();
 }
 
 void setup_wifi() {
@@ -88,9 +99,24 @@ void callback(char* topic, byte* payload, unsigned int length) {
     delay(10);
   } 
   else if (slider == "speed") {
+    int previousSpeed = ESC.read(); // Store the previous speed value
     ESC.attach(D8, 1000, 2000);
     ESC.write(value);
     delay(10);
+    if (previousSpeed > value) { // Check if the speed has been lowered
+        // Turn entire strip red
+        for(int i=0; i<strip.numPixels(); i++) {
+            strip.setPixelColor(i, strip.Color(255,0,0)); // Red color
+        }
+        strip.show();
+        delay(2000); // Wait for 2 seconds
+
+        // Turn off the strip
+        for(int i=0; i<strip.numPixels(); i++) {
+            strip.setPixelColor(i, strip.Color(0,0,0)); // Off
+        }
+        strip.show();
+    }
   }
 }
 
@@ -136,5 +162,16 @@ void loop() {
   Serial.print("Distance: ");
   Serial.print(distance);
   Serial.println(" cm");
+  client.publish("esp/car/distance", String(distance).c_str());
+  if (distance <= 15) {
+    digitalWrite(buzzerPin, HIGH); // Start the buzzer
+    delay(3000); // Wait for 3 seconds
+    digitalWrite(buzzerPin, LOW); // Stop the buzzer
+    ESC.write(90); // Emergency stop
+  } else if (distance <= 30) {
+    digitalWrite(buzzerPin, HIGH);
+    delay(100); // Short beep
+    digitalWrite(buzzerPin, LOW);
+  }
   delay(100);
 }

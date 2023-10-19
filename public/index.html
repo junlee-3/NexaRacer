@@ -7,6 +7,23 @@
         function updateSlider(sliderId, value) {
             fetch(`/send?slider=${sliderId}&value=${value}`);
         }
+
+        const es = new EventSource('/events');
+        es.onmessage = function(event) {
+            const distance = parseFloat(event.data);
+            document.getElementById('distanceValue').innerText = distance;
+            
+            const warningElem = document.getElementById('warning');
+            if (distance <= 15) {
+                warningElem.innerText = "EMERGENCY STOP TO AVOID CRASH";
+                warningElem.style.color = "red";
+            } else if (distance <= 30) {
+                warningElem.innerText = "OBSTACLE DETECTED AHEAD - CAUTION";
+                warningElem.style.color = "yellow";
+            } else {
+                warningElem.innerText = "";
+            }
+        }
     </script>
 </head>
 <body>
@@ -15,5 +32,8 @@
     <input type="range" min="0" max="180" oninput="updateSlider('steering', this.value)" />
     <label>Speed:</label>
     <input type="range" min="0" max="180" oninput="updateSlider('speed', this.value)" />
+    <p>Distance: <span id="distanceValue">...</span> cm</p>
+    <p id="warning" style="font-weight: bold;"></p>
+    <img src ="">
 </body>
 </html>
