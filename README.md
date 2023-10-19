@@ -57,4 +57,6 @@ Contributions are what make the open-source community such a fantastic place to 
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
+![alt text](https://hobbiesdirect.com.au/image/cache/catalog/product/HSP/HSP-94607/HSP-94607_13-1200x800.webp)
+
    
