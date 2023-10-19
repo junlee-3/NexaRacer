@@ -1,24 +1,25 @@
-# 🏎️ NexaRacer IoTRacer: The IoT Connected Racecar 🌐
+# 🏎️ NexaRacer NexaRacer: The IoT Connected Racecar 🌐
 
 Drive into the future with `NexaRacer`, an Internet of Things (IoT) connected racecar controlled seamlessly from a web interface.
 
 ## 📖 Overview
 
-`NexaRacer` combines the thrill of racing with the power of modern IoT technologies. Using a Node.js backend server and a sleek web interface, users can control the speed and steering of their ESP32-based racecar in real-time. With WebSocket integration, commands from the browser are instantly translated to movements on the ground.
-The project utilises an ESP32 board running firmware and NodeJS to control a remote-controlled car. Through websockets, the ESP32 is able to recive data and turn that into movements.
+`NexaRacer` combines the thrill of racing with the power of modern IoT technologies. Using a Node.js backend server and a sleek web interface, users can control the speed and steering of their ESP8266-based racecar in real-time. With WebSocket integration, commands from the browser are instantly translated to movements on the ground.
+The project utilises an ESP8266 board running firmware and NodeJS to control a remote-controlled car. Through websockets, the ESP8266 is able to recive data and turn that into movements.
 
 ## ✨ Features
 
 - **Real-time Control**: No lag. Just pure, unadulterated speed. 🚀
 - **Web Interface**: Control your racer from any device with a browser. 📱💻
 - **IoT Enabled**: Harness the power of connected devices. 🌐🔗
+- **Obstacle Avoidance**: Car will warn you if an obstacle is ahead, and emergency stop if needed!
 
 ## 🛠️ Dependencies
 
 - `Node.js` and `npm`: The backbone of our server.
 - `express`: Powers our web server.
-- `ws`: Handles WebSocket connections for real-time control.
-- `ESPAsyncTCP`, `ESPAsyncWebServer`, `WebSocketsClient` Arduino libraries for ESP32 communication.
+- `mqtt`: Handles sending our data to the car.
+- `ESP8266WiFi.h`, `PubSubClient.h`, `Servo.h`, `Adafruit_NeoPixel.h` Arduino libraries for our ESP8266
 
 ## 🚀 Installation & Running
 
@@ -38,19 +39,19 @@ The project utilises an ESP32 board running firmware and NodeJS to control a rem
    node server.js
    ```
 
-   ## ESP32 Setup:
+   ## ESP8266 Setup:
 
-1. Open the `ESP_Car.ino` in the Arduino IDE.
+1. Open the `NexaRacer.ino` in the Arduino IDE.
 2. Ensure you've installed the necessary libraries (refer to Dependencies).
-3. Upload the sketch to your ESP32.
+3. Upload the sketch to your ESP8266.
 
 ## Racing Time! 🏁:
 
-With both your Node.js server running and the ESP32 powered up, head over to [http://localhost:3000](http://localhost:3000) in your web browser. Adjust the sliders, and watch your `IoTRacer` come to life!
+With both your Node.js server running and the ESP8266 powered up, head over to [http://localhost:3000](http://localhost:3000) in your web browser. Adjust the sliders, and watch your `NexaRacer` come to life!
 
 ## 🤝 Contributing
 
-Contributions are what make the open-source community such a fantastic place to learn, inspire, and create. We warmly welcome any contributions you'd like to make to `IoTRacer`.
+Contributions are what make the open-source community such a fantastic place to learn, inspire, and create. We warmly welcome any contributions you'd like to make to `NexaRacer`.
 
 ## 📜 License
 
