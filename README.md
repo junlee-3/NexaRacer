@@ -21,6 +21,8 @@ The project utilises an ESP8266 board running firmware and NodeJS to control a r
 - `mqtt`: Handles sending our data to the car.
 - `ESP8266WiFi.h`, `PubSubClient.h`, `Servo.h`, `Adafruit_NeoPixel.h` Arduino libraries for our ESP8266
 
+# Documentation 📚
+
 ## 🚀 Installation & Running
 
 1. **Node.js Setup**:
@@ -59,4 +61,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ![alt text](https://hobbiesdirect.com.au/image/cache/catalog/product/HSP/HSP-94607/HSP-94607_13-1200x800.webp)
 
-   
+## Credits
+All of this code is my own code and work. Thank you to Arjun Sharma, Damian Camilleri, and Will Madl for teaching me how to use the Car chasis at various Code Cadets Sessions, along with teaching me C++.
